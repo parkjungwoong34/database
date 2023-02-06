@@ -1,42 +1,60 @@
-class Node2() :
-	def __init__ (self) :
-		self.Llink = None
-		self.data = None
-		self.Rlink = None
+import random
 
-def printNodes(start):
-	current = start
-	if current.Rlink == None :
+def isStackFull() :
+	global SIZE, stack, top
+	if (top >= SIZE-1) :
+		return True
+	else :
+		return False
+
+def isStackEmpty() :
+	global SIZE, stack, top
+	if (top == -1) :
+		return True
+	else :
+		return False
+
+def push(data) :
+	global SIZE, stack, top
+	if (isStackFull()) :
 		return
-	print("정방향 --> ", end=' ')
-	print(current.data, end=' ')
-	while current.Rlink != None:
-		current = current.Rlink
-		print(current.data, end=' ')
-	print()
-	print("역방향 --> ", end=' ')
-	print(current.data, end=' ')
-	while current.Llink != None:
-		current = current.Llink
-		print(current.data, end=' ')
+	top += 1
+	stack[top] = data
 
-memory = []
-head, current, pre = None, None, None
-dataArray = ["다현", "정연", "쯔위", "사나", "지효"]
+def pop() :
+	global SIZE, stack, top
+	if (isStackEmpty()) :
+		return None
+	data = stack[top]
+	stack[top] = None
+	top -= 1
+	return data
+
+def peek() :
+	global SIZE, stack, top
+	if (isStackEmpty()) :
+		return None
+	return stack[top]
+
+SIZE = 10
+stack = [ None for _ in range(SIZE) ]
+top = -1
 
 if __name__ == "__main__" :
 
-	node = Node2()
-	node.data = dataArray[0]
-	head = node
-	memory.append(node)
+	stoneAry = ["빨강", "파랑", "초록", "노랑", "보라", "주황"]
+	random.shuffle(stoneAry)
 
-	for data in dataArray[1:] :
-		pre = node
-		node = Node2()
-		node.data = data
-		pre.Rlink = node
-		node.Llink = pre
-		memory.append(node)
+	print("과자집에 가는길 : ", end = ' ')
+	for stone in stoneAry :
+		push(stone)
+		print(stone, "-->", end = ' ')
+	print("과자집")
 
-	printNodes(head)
+	print("우리집에 오는길 : ", end = ' ')
+	while True :
+		stone = pop()
+		if stone == None :
+			break
+		print(stone, "-->", end = ' ')
+	print("우리집")
