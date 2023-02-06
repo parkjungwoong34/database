@@ -1,76 +1,42 @@
-import random
-import math
-
-class Node() :
+class Node2() :
 	def __init__ (self) :
+		self.Llink = None
 		self.data = None
-		self.link = None
+		self.Rlink = None
 
-def printStores(go) :
-	current = go
-	if current == None :
+def printNodes(start):
+	current = start
+	if current.Rlink == None :
 		return
-
-	while current.link != head:
-		current = current.link
-		x, y = current.data[1:]
-		print(current.data[0], '편의점, 거리:', math.sqrt(x*x + y*y))
+	print("정방향 --> ", end=' ')
+	print(current.data, end=' ')
+	while current.Rlink != None:
+		current = current.Rlink
+		print(current.data, end=' ')
 	print()
-
-def  makeStoreList(market) :
-	global memory, head, current, pre
-
-	node = Node()
-	node.data = market
-	memory.append(node)
-
-	if head == None :
-		head = node
-		node.link = head
-		return
-
-	nodeX, nodeY = node.data[1:]
-	nodeDist = math.sqrt(nodeX*nodeX + nodeY*nodeY)
-	headX, headY = head.data[1:]
-	headDist = math.sqrt(headX*headX + headY*headY)
-
-	if headDist > nodeDist :
-		node.link = head
-		last = head
-		while last.link != head :
-			last = last.link
-		last.link = node
-		head = node
-		return
-
-	current = head
-	while current.link != head :
-		pre = current
-		current = current.link
-		currX, currY = current.data[1:]
-		currDist = math.sqrt(currX*currX + currY*currY)
-		if currDist > nodeDist :
-			pre.link = node
-			node.link = current
-			return
-
-	current.link = node
-	node.link = head
-
+	print("역방향 --> ", end=' ')
+	print(current.data, end=' ')
+	while current.Llink != None:
+		current = current.Llink
+		print(current.data, end=' ')
 
 memory = []
 head, current, pre = None, None, None
+dataArray = ["다현", "정연", "쯔위", "사나", "지효"]
 
 if __name__ == "__main__" :
 
-	storeArray = []
-	storeName = 'A'
-	for _ in range(10) :
-		store = (storeName, random.randint(1, 100), random.randint(1, 100) )
-		storeArray.append(store)
-		storeName = chr(ord(storeName) + 1)	# 편의점 이름을 A->B->C… 으로 변경
+	node = Node2()
+	node.data = dataArray[0]
+	head = node
+	memory.append(node)
 
-	for store in storeArray :
-		makeStoreList(store)
+	for data in dataArray[1:] :
+		pre = node
+		node = Node2()
+		node.data = data
+		pre.Rlink = node
+		node.Llink = pre
+		memory.append(node)
 
-	printStores(head)
+	printNodes(head)
