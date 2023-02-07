@@ -1,62 +1,54 @@
+import random
+class TreeNode() :
+	def __init__ (self) :
+		self.left = None
+		self.data = None
+		self.right = None
 
-def is_queue_full() :
-	global SIZE, queue, front, rear
-	if ( (rear + 1) % SIZE == front) :
-		return True
-	else :
-		return False
+## 전역 변수 선언 부분 ##
+memory = []
+root = None
+dataAry = ['김밥', '참치김밥', '김치김밥', '치킨마요김밥',  '깻잎김밥', '삼겹살김발' ,'삼각김밥']
+sellAry = [ random.choice(dataAry) for _ in  range(20)]
 
-def is_queue_empty() :
-	global SIZE, queue, front, rear
-	if (front == rear) :
-		return True
-	else :
-		return False
+print('오늘 판매된 물건(중복O) -->', sellAry)
 
-def en_queue(data) :
-	global SIZE, queue, front, rear
-	if (is_queue_full()) :
-		print("큐가 꽉 찼습니다.")
+## 메인 코드 부분 ##
+node = TreeNode()
+node.data = sellAry[0]
+root = node
+memory.append(node)
+
+for name in sellAry[1:] :
+
+	node = TreeNode()
+	node.data = name
+
+	current = root
+	while True :
+		if name == current.data :
+			break
+		if name < current.data :
+			if current.left == None :
+				current.left = node
+				memory.append(node)
+				break
+			current = current.left
+		else :
+			if current.right == None :
+				current.right = node
+				memory.append(node)
+				break
+			current = current.right
+
+print("이진 탐색 트리 구성 완료!")
+
+def preorder(node) :
+	if node == None :
 		return
-	rear = (rear + 1) % SIZE
-	queue[rear] = data
+	print(node.data, end = ' ')
+	preorder(node.left)
+	preorder(node.right)
 
-def de_queue() :
-	global SIZE, queue, front, rear
-	if (is_queue_empty()) :
-		print("큐가 비었습니다.")
-		return None
-	front = (front + 1) % SIZE
-	data = queue[front]
-	queue[front] = None
-	return data
-
-def peek() :
-	global SIZE, queue, front, rear
-	if (is_queue_empty()) :
-		print("큐가 비었습니다.")
-		return None
-	return queue[(front + 1) % SIZE]
-
-def calcTime() :
-	global SIZE, queue, front, rear
-	timeSum = 0
-	for i in range((front+1)% SIZE, (rear+1)%SIZE) :
-		timeSum += queue[i][1]
-	return timeSum
-
-SIZE = 6
-queue = [ None for _ in range(SIZE) ]
-front = rear = 0
-
-if __name__ == "__main__" :
-	waitCall = [('사용', 9), ('고장', 3), ('환불', 4), ('환불', 4), ('고장', 3)]
-
-	for call in waitCall :
-		print(" 대기시간은 ", calcTime(), "입니다.")
-		print("현재 대기  --> ", queue)
-		en_queue(call)
-		print()
-
-	print("최종 대기  --> ", queue)
-	print("프로그램 종료")
+print('오늘 판매된 종류(중복X)--> ', end = ' ')
+preorder(root)
