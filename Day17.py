@@ -1,7 +1,7 @@
 
 def is_queue_full() :
 	global SIZE, queue, front, rear
-	if (rear == SIZE-1) :
+	if ( (rear + 1) % SIZE == front) :
 		return True
 	else :
 		return False
@@ -18,7 +18,7 @@ def en_queue(data) :
 	if (is_queue_full()) :
 		print("큐가 꽉 찼습니다.")
 		return
-	rear += 1
+	rear = (rear + 1) % SIZE
 	queue[rear] = data
 
 def de_queue() :
@@ -26,16 +26,9 @@ def de_queue() :
 	if (is_queue_empty()) :
 		print("큐가 비었습니다.")
 		return None
-	front += 1
+	front = (front + 1) % SIZE
 	data = queue[front]
 	queue[front] = None
-
-	for i in range(front + 1, rear + 1): 	# 모든 사람을 한칸씩 앞으로 당긴다.
-		queue[i - 1] = queue[i]
-		queue[i] = None
-	front = -1
-	rear -= 1
-
 	return data
 
 def peek() :
@@ -43,22 +36,27 @@ def peek() :
 	if (is_queue_empty()) :
 		print("큐가 비었습니다.")
 		return None
-	return queue[front+1]
+	return queue[(front + 1) % SIZE]
 
-SIZE = 5
+def calcTime() :
+	global SIZE, queue, front, rear
+	timeSum = 0
+	for i in range((front+1)% SIZE, (rear+1)%SIZE) :
+		timeSum += queue[i][1]
+	return timeSum
+
+SIZE = 6
 queue = [ None for _ in range(SIZE) ]
-front = rear = -1
+front = rear = 0
 
 if __name__ == "__main__" :
-	en_queue('강호동')
-	en_queue('이수근')
-	en_queue('은지원')
-	en_queue('김c')
-	en_queue('이승기')
-	print("대기 상태 : ", queue)
+	waitCall = [('사용', 9), ('고장', 3), ('환불', 4), ('환불', 4), ('고장', 3)]
 
-	for _ in range(rear+1) :
-		print(de_queue(), ' 식당에 들어감')
-		print("대기 상태 : ", queue)
+	for call in waitCall :
+		print(" 대기시간은 ", calcTime(), "입니다.")
+		print("현재 대기  --> ", queue)
+		en_queue(call)
+		print()
 
-	print("영업 종료!")
+	print("최종 대기  --> ", queue)
+	print("프로그램 종료")
