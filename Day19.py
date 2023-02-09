@@ -1,22 +1,19 @@
-from tkinter import *
+def score_Sort(ary) :
+	n = len(ary)
+	for end in range(1, n) :
+		for cur in range(end, 0, -1) :
+			if ( ary[cur-1][1] > ary[cur][1] ) :
+				ary[cur-1], ary[cur] = ary[cur], ary[cur-1]
+	return ary
 
-def Triangle(x, y, size) :
-	if size >= 30 :
-		Triangle(x, y, size / 2)
-		Triangle(x + size / 2, y, size / 2)
-		Triangle(x + size / 4, int(y - size * (3 ** 0.5) / 4), size / 2)
-	else :
-		canvas.create_polygon (x, y, x + size, y, x + size / 2, y - size*(3 ** 0.5) / 2, fill = 'red', outline = "red")
 
-w_Size = 1000
-radius = 400
+Score_Ary = [['선미', 88], ['초아', 99], ['화사', 71], ['영탁', 78], ['영웅', 67], ['민호', 92]]
 
-window = Tk()
-window.title("삼각형 모양의 프랙탈")
-canvas = Canvas(window, height = w_Size, width = w_Size, bg ='white')
 
-Triangle(w_Size / 5, w_Size / 5 * 4, w_Size * 2 / 3)
+print('정렬 전 -->', Score_Ary)
+Score_Ary = score_Sort(Score_Ary)
+print('정렬 후 -->', Score_Ary)
 
-canvas.pack()
-window.mainloop()
-
+print(' 성적별 조 편성표 ')
+for i in range(len(Score_Ary) // 2) :
+	print(Score_Ary[i][0], ':', Score_Ary[len(Score_Ary) - 1 - i][0])
