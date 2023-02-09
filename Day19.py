@@ -1,18 +1,22 @@
-## 함수 선언 부분 ##
-def Nota(base, n):
-	if n < base :
-		print(numberCh[n], end =' ')
+from tkinter import *
+
+def Triangle(x, y, size) :
+	if size >= 30 :
+		Triangle(x, y, size / 2)
+		Triangle(x + size / 2, y, size / 2)
+		Triangle(x + size / 4, int(y - size * (3 ** 0.5) / 4), size / 2)
 	else :
-		Nota(base, n // base)
-		print(numberCh[n % base], end =' ')
+		canvas.create_polygon (x, y, x + size, y, x + size / 2, y - size*(3 ** 0.5) / 2, fill = 'red', outline = "red")
 
-numberCh = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-numberCh += ['A', 'B', 'C', 'D', 'E', 'F']
+w_Size = 1000
+radius = 400
 
-number = int(input('10진수 입력 -->'))
-print('\n 2진수 : ', end = ' ')
-Nota(2, number)
-print('\n 8진수 : ', end = ' ')
-Nota(8, number)
-print('\n16진수 : ', end = ' ')
-Nota(16, number)
+window = Tk()
+window.title("삼각형 모양의 프랙탈")
+canvas = Canvas(window, height = w_Size, width = w_Size, bg ='white')
+
+Triangle(w_Size / 5, w_Size / 5 * 4, w_Size * 2 / 3)
+
+canvas.pack()
+window.mainloop()
+
