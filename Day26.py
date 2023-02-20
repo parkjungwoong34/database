@@ -1,11 +1,24 @@
 import random
 
-def Bin_Search(ary, fData):
+def Seq_Search(ary, fData) :
+	global count
+	pos = -1
+	for i in range(len(ary)) :
+		count += 1
+		if ary[i] == fData :
+			pos = i
+			break
+	return pos
+
+def Bin_Search(ary, fData) :
+	global count
 	start = 0
 	end = len(ary) - 1
 
 	while (start <= end) :
+		count += 1
 		mid = (start + end) // 2
+
 		if fData == ary[mid] :
 			return mid
 		elif fData > ary[mid] :
@@ -15,25 +28,25 @@ def Bin_Search(ary, fData):
 
 	return -1
 
-Data_Ary = ['바나나맛우유', '레쓰비캔커피', '츄파춥스', '도시락', '삼다수', '코카콜라', '삼각김밥']
-Sell_Ary = [random.choice(Data_Ary) for _ in range(20)]
 
-print('#오늘 판매된 전체 물건(중복O, 정렬X) -->', Sell_Ary)
-Sell_Ary.sort()
-print('#오늘 판매된 전체 물건(중복O, 정렬O) -->', Sell_Ary)
-sellProduct = list(set(Sell_Ary))
-print('#오늘 판매된 물품 종류(중복x) -->', sellProduct)
+dataAry, sortedAry = [], []
+findData = 7878
+count = 0
 
-countList = []
-for product in sellProduct :
-	count = 0
-	pos = 0
-	while (pos != -1) :
-		pos = Bin_Search(Sell_Ary, product)
-		if pos != -1 :
-			count += 1
-			del(Sell_Ary[pos])
-	countList.append( (product, count))
 
-print()
-print("결산 결과 ==>", countList)
+dataAry = [ random.randint(0, 999999) for _ in range(1000000)]
+dataAry.insert(random.randint(0, 1000000), findData)
+sortedAry = sorted(dataAry)
+
+print('비정렬 배열(100만개) -->', dataAry[0:5], '~~~~', dataAry[-5:len(dataAry)])
+print('정렬 배열(100만개) -->', sortedAry[0:5], '~~~~', sortedAry[-5:len(sortedAry)])
+
+count =0
+pos = Seq_Search(dataAry, findData)
+if pos != -1 :
+	print('순차 검색(비정렬 데이터) -->', count, '회')
+
+count =0
+pos = Bin_Search(sortedAry, findData)
+if pos != -1 :
+	print('이진 검색(정렬 데이터) -->', count, '회')
